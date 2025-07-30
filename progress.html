@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Progress</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🌟 Your Green Progress</h1>
+    <a class="link" href="index.html">← Back to Home</a>
+  </header>
+  <main>
+    <p id="summary">Loading your eco-scores...</p>
+    <div class="badge" id="badge">🏅 Eco Starter</div>
+    <h2>🔥 Your Current Streak</h2>
+    <div id="streak">Loading...</div>
+    <h2>🏅 Badges Earned</h2>
+    <div id="badges" class="badge-container"></div>
+  
+<section>
+  <canvas id="shareCardCanvas" style="display: none; margin-top: 1rem;"></canvas>
+  <button onclick="generateShareCard()" class="button">🎉 Generate Share Card</button>
+  <a id="downloadLink" style="display: none;" class="button" download="green badge.jpg">⬇️ Download Share Card</a>
+</section>
+
+
+</div>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

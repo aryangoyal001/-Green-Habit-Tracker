@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Habit Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🌱 Green Habit Tracker</h1>
+  </header>
+  <main>
+    <section class="eco-tip">
+      <h2>💡 What To Do Today</h2>
+      <p id="ecoTip">Loading tip...</p>
+    </section>
+    <section class="log-section">
+      <h2>📝 Track Your Habit</h2>
+      <form id="habitForm">
+        <input type="text" id="habitInput" placeholder="Enter eco-friendly habit..." required />
+        <button type="submit">Log Habit</button>
+      </form>
+    </section>
+    <section class="summary">
+      <h2>📊 Summary</h2>
+      <p id="habitCount">Total habits logged: 0</p>
+      <p id="carbonSaved">Estimated CO₂ saved: 0.00 kg</p>
+      <a class="link" href="log.html">📜 View What You've Done</a>
+      <a class="link" href="progress.html">🏆 Your Progress</a>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

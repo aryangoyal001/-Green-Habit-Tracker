@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Habit Log</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>📜 What You've Done</h1>
+    <a class="link" href="index.html">← Back to Tracker</a>
+  </header>
+  <main>
+    <ul id="habitLogList" class="habit-log"></ul>
+  </main>
+  <script>
+    const habitLogList = document.getElementById("habitLogList");
+    const habits = JSON.parse(localStorage.getItem("habitLog")) || [];
+    habits.forEach(habit => {
+      const li = document.createElement("li");
+      li.textContent = habit;
+      habitLogList.appendChild(li);
+    });
+  </script>
+</body>
+</html>
