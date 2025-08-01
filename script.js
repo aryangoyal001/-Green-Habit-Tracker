@@ -78,8 +78,10 @@ function initProgress() {
     }
   }
   maxStreak = Math.max(maxStreak, currentStreak);
-  if (streakEl) streakEl.innerText = `🔥 Streak: ${maxStreak} day(s) | 📅 Active Days: ${uniqueDates.length}`;
+const activeDays = uniqueDates.length;
+if (streakEl) streakEl.innerText = `🔥 Streak: ${maxStreak} day(s) | 📅 Active Days: ${activeDays}`;
   window.streak = maxStreak;
+  window.activeDays = activeDays;
 
   if (totalHabits >= 3 && !badges.includes("Eco Newbie")) badges.push("Eco Newbie");
   if (totalHabits >= 7 && !badges.includes("Green Streaker")) badges.push("Green Streaker");
@@ -122,7 +124,8 @@ function generateShareCard() {
     ctx.fillText(`✔️ Habits Logged: ${window.totalHabits}`, 50, 120);
     ctx.fillText(`🌱 CO₂ Saved: ${(window.totalHabits * 0.5).toFixed(2)} kg`, 50, 160);
     ctx.fillText(`🔥 Streak: ${window.streak} day(s)`, 50, 200);
-    ctx.fillText(`🏅 Badge: ${window.currentBadge}`, 50, 240);
+ctx.fillText(`📅 Active Days: ${window.activeDays}`, 50, 230);
+ctx.fillText(`🏅 Badge: ${window.currentBadge}`, 50, 260);
 
     ctx.drawImage(badgeImg, 370, 100, 100, 100);
 
