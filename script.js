@@ -69,17 +69,23 @@ function initProgress() {
   for (let i = 1; i < uniqueDates.length; i++) {
     const prev = new Date(uniqueDates[i - 1]);
     const curr = new Date(uniqueDates[i]);
-    const diffDays = (curr - prev) / (1000 * 60 * 60 * 24);
+    const diffDays = Math.round((curr - prev) / (1000 * 60 * 60 * 24));
     if (diffDays === 1) {
       currentStreak++;
-    } else {
+    } else if (diffDays > 1) {
       maxStreak = Math.max(maxStreak, currentStreak);
       currentStreak = 1;
     }
   }
+
   maxStreak = Math.max(maxStreak, currentStreak);
-  if (streakEl) streakEl.innerText = `🔥 Streak: ${maxStreak} day(s)`;
-  window.streak = maxStreak;
+  const today = new Date().toISOString().split("T")[0];
+  if (!uniqueDates.includes(today)) {
+    currentStreak = 0;
+  }
+
+  if (streakEl) streakEl.innerText = `🔥 Streak: ${currentStreak} day(s)`;
+  window.streak = currentStreak;
 
   if (totalHabits >= 3 && !badges.includes("Eco Newbie")) badges.push("Eco Newbie");
   if (totalHabits >= 7 && !badges.includes("Green Streaker")) badges.push("Green Streaker");
