@@ -14,15 +14,17 @@
     <ul id="habitLogList" class="habit-log"></ul>
   </main>
   <script>
-  const habitLogList = document.getElementById("habitLogList");
-  const habits = JSON.parse(localStorage.getItem("habitLog")) || [];
+    const habitLogList = document.getElementById("habitLogList");
+    const habits = JSON.parse(localStorage.getItem("habitLog")) || [];
 
-  habits.forEach(habit => {
-    const li = document.createElement("li");
-    li.innerHTML = `<strong>${habit.name}</strong> <span style="color: gray;">(${habit.date})</span>`;
-    habitLogList.appendChild(li);
-  });
-</script>
-
+    habits.forEach(entry => {
+      const li = document.createElement("li");
+      const habitText = entry.text || "🟢 Habit"; // fallback
+      const habitDate = entry.date || "Unknown date";
+      li.textContent = `${habitText} (${habitDate})`;
+      habitLogList.appendChild(li);
+    });
+  </script>
 </body>
 </html>
+
