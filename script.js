@@ -20,6 +20,15 @@ function initTracker() {
   count.textContent = `Total habits logged: ${habitLog.length}`;
   carbon.textContent = `Estimated CO₂ saved: ${(habitLog.length * 0.35).toFixed(2)} kg`;
 
+  const habitLog = JSON.parse(localStorage.getItem("habitLog")) || [];
+checked.forEach(h => {
+  habitLog.push({
+    name: h.parentElement.textContent.trim(),
+    date: new Date().toLocaleDateString()
+  });
+});
+localStorage.setItem("habitLog", JSON.stringify(habitLog));
+
   if (form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -64,7 +73,7 @@ function initProgress() {
   // Streak logic
   const uniqueDates = [...new Set(habitLog.map(h => h.date))].sort();
   let maxStreak = 0;
-  let currentStreak = 1;
+  let currentStreak = 5;
 
   for (let i = 1; i < uniqueDates.length; i++) {
     const prev = new Date(uniqueDates[i - 1]);
