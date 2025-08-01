@@ -8,8 +8,10 @@ const ecoTips = [
 
 function initTracker() {
   const tipElement = document.getElementById("ecoTip");
-  const randomTip = ecoTips[Math.floor(Math.random() * ecoTips.length)];
-  if (tipElement) tipElement.textContent = randomTip;
+  if (tipElement) {
+    const randomTip = ecoTips[Math.floor(Math.random() * ecoTips.length)];
+    tipElement.textContent = randomTip;
+  }
 
   const form = document.getElementById("habitForm");
   const input = document.getElementById("habitInput");
@@ -27,15 +29,15 @@ function initTracker() {
       if (habit) {
         const entry = {
           text: habit,
-          date: new Date().toISOString().split("T")[0] // format: YYYY-MM-DD
+          date: new Date().toISOString().split("T")[0]
         };
         habitLog.push(entry);
         localStorage.setItem("habitLog", JSON.stringify(habitLog));
-        if (count) count.textContent = `Total habits logged: ${habitLog.length}`;
-        if (carbon) carbon.textContent = `Estimated CO₂ saved: ${(habitLog.length * 0.35).toFixed(2)} kg`;
+        count.textContent = `Total habits logged: ${habitLog.length}`;
+        carbon.textContent = `Estimated CO₂ saved: ${(habitLog.length * 0.35).toFixed(2)} kg`;
         input.value = "";
         alert("Habit logged!");
-        initProgress(); // Update badges and streak
+        initProgress(); // Refresh badges and streak
       }
     });
   }
@@ -54,14 +56,12 @@ function initProgress() {
   const totalHabits = habitLog.length;
   if (summary) summary.textContent = `You've logged ${totalHabits} green habits so far. Keep going!`;
 
-  // Determine current badge
   let currentBadge = "🏅 Eco Starter";
   if (totalHabits >= 15) currentBadge = "🥇 Sustainability Star";
   else if (totalHabits >= 7) currentBadge = "🏆 Green Streaker";
   else if (totalHabits >= 3) currentBadge = "🎉 Eco Newbie";
   if (badge) badge.textContent = currentBadge;
 
-  // Calculate streak
   const uniqueDates = [...new Set(habitLog.map(h => h.date))].sort();
   let maxStreak = 0;
   let currentStreak = 1;
@@ -79,19 +79,13 @@ function initProgress() {
   }
   maxStreak = Math.max(maxStreak, currentStreak);
   if (streakEl) streakEl.innerText = `🔥 Streak: ${maxStreak} day(s)`;
-
-  // Store for share card
   window.streak = maxStreak;
-  window.totalHabits = totalHabits;
-  window.currentBadge = currentBadge.replace(/^.*? /, ""); // Remove emoji
 
-  // Assign earned badges
   if (totalHabits >= 3 && !badges.includes("Eco Newbie")) badges.push("Eco Newbie");
   if (totalHabits >= 7 && !badges.includes("Green Streaker")) badges.push("Green Streaker");
   if (totalHabits >= 15 && !badges.includes("Sustainability Star")) badges.push("Sustainability Star");
   localStorage.setItem("badges", JSON.stringify(badges));
 
-  // Display badges
   if (badgeContainer) {
     badgeContainer.innerHTML = "";
     badges.forEach(b => {
@@ -101,6 +95,9 @@ function initProgress() {
       badgeContainer.appendChild(div);
     });
   }
+
+  window.totalHabits = totalHabits;
+  window.currentBadge = currentBadge.replace(/^.*? /, "");
 }
 
 function generateShareCard() {
@@ -114,7 +111,6 @@ function generateShareCard() {
 
   badgeImg.onload = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     ctx.fillStyle = "#e8f5e9";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -136,10 +132,9 @@ function generateShareCard() {
     link.style.display = 'inline-block';
   };
 
-  badgeImg.src = "green-badge.jpg"; // ✅ Make sure this file exists and has no space in filename
+  badgeImg.src = "green badge.jpg"; // Ensure image exists
 }
 
-// Run on page load
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("ecoTip")) initTracker();
   if (document.getElementById("summary")) initProgress();
