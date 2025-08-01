@@ -17,34 +17,25 @@ function initTracker() {
   const carbon = document.getElementById("carbonSaved");
 
   let habitLog = JSON.parse(localStorage.getItem("habitLog")) || [];
-  count.textContent = `Total habits logged: ${habitLog.length}`;
-  carbon.textContent = `Estimated CO₂ saved: ${(habitLog.length * 0.35).toFixed(2)} kg`;
+  if (count) count.textContent = `Total habits logged: ${habitLog.length}`;
+  if (carbon) carbon.textContent = `Estimated CO₂ saved: ${(habitLog.length * 0.35).toFixed(2)} kg`;
 
-  const habitLog = JSON.parse(localStorage.getItem("habitLog")) || [];
-checked.forEach(h => {
-  habitLog.push({
-    name: h.parentElement.textContent.trim(),
-    date: new Date().toLocaleDateString()
-  });
-});
-localStorage.setItem("habitLog", JSON.stringify(habitLog));
-
-  if (form) {
+  if (form && input) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const habit = input.value.trim();
       if (habit) {
         const entry = {
           text: habit,
-          date: new Date().toISOString().split("T")[0] // Store only date
+          date: new Date().toISOString().split("T")[0] // format: YYYY-MM-DD
         };
         habitLog.push(entry);
         localStorage.setItem("habitLog", JSON.stringify(habitLog));
-        count.textContent = `Total habits logged: ${habitLog.length}`;
-        carbon.textContent = `Estimated CO₂ saved: ${(habitLog.length * 0.35).toFixed(2)} kg`;
+        if (count) count.textContent = `Total habits logged: ${habitLog.length}`;
+        if (carbon) carbon.textContent = `Estimated CO₂ saved: ${(habitLog.length * 0.35).toFixed(2)} kg`;
         input.value = "";
         alert("Habit logged!");
-        initProgress(); // Refresh badges and streak after logging
+        initProgress(); // Update badges and streak
       }
     });
   }
@@ -61,19 +52,19 @@ function initProgress() {
   const badgeContainer = document.getElementById("badges");
 
   const totalHabits = habitLog.length;
-  summary.textContent = `You've logged ${totalHabits} green habits so far. Keep going!`;
+  if (summary) summary.textContent = `You've logged ${totalHabits} green habits so far. Keep going!`;
 
-  // Determine badge
+  // Determine current badge
   let currentBadge = "🏅 Eco Starter";
   if (totalHabits >= 15) currentBadge = "🥇 Sustainability Star";
   else if (totalHabits >= 7) currentBadge = "🏆 Green Streaker";
   else if (totalHabits >= 3) currentBadge = "🎉 Eco Newbie";
-  badge.textContent = currentBadge;
+  if (badge) badge.textContent = currentBadge;
 
-  // Streak logic
+  // Calculate streak
   const uniqueDates = [...new Set(habitLog.map(h => h.date))].sort();
   let maxStreak = 0;
-  let currentStreak = 5;
+  let currentStreak = 1;
 
   for (let i = 1; i < uniqueDates.length; i++) {
     const prev = new Date(uniqueDates[i - 1]);
@@ -87,27 +78,29 @@ function initProgress() {
     }
   }
   maxStreak = Math.max(maxStreak, currentStreak);
-  streakEl.innerText = `🔥 Streak: ${maxStreak} day(s)`;
-  window.streak = maxStreak;
+  if (streakEl) streakEl.innerText = `🔥 Streak: ${maxStreak} day(s)`;
 
-  // Earned badges
+  // Store for share card
+  window.streak = maxStreak;
+  window.totalHabits = totalHabits;
+  window.currentBadge = currentBadge.replace(/^.*? /, ""); // Remove emoji
+
+  // Assign earned badges
   if (totalHabits >= 3 && !badges.includes("Eco Newbie")) badges.push("Eco Newbie");
   if (totalHabits >= 7 && !badges.includes("Green Streaker")) badges.push("Green Streaker");
   if (totalHabits >= 15 && !badges.includes("Sustainability Star")) badges.push("Sustainability Star");
   localStorage.setItem("badges", JSON.stringify(badges));
 
   // Display badges
-  badgeContainer.innerHTML = "";
-  badges.forEach(b => {
-    const div = document.createElement("div");
-    div.className = "badge";
-    div.textContent = b;
-    badgeContainer.appendChild(div);
-  });
-
-  // Prepare for share card
-  window.totalHabits = totalHabits;
-  window.currentBadge = currentBadge.replace(/^.*? /, ""); // Remove emoji
+  if (badgeContainer) {
+    badgeContainer.innerHTML = "";
+    badges.forEach(b => {
+      const div = document.createElement("div");
+      div.className = "badge";
+      div.textContent = b;
+      badgeContainer.appendChild(div);
+    });
+  }
 }
 
 function generateShareCard() {
@@ -143,9 +136,10 @@ function generateShareCard() {
     link.style.display = 'inline-block';
   };
 
-  badgeImg.src = "green badge.jpg"; // Ensure this file exists in the same folder
+  badgeImg.src = "green-badge.jpg"; // ✅ Make sure this file exists and has no space in filename
 }
 
+// Run on page load
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("ecoTip")) initTracker();
   if (document.getElementById("summary")) initProgress();
